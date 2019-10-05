@@ -31,6 +31,10 @@ public class HomeFragment extends Fragment
 
     private HomeViewModel homeViewModel;
 
+    // COnverts unix time stamp to a date object
+    public Date getDataFromUNIX(long unixTimeStamp) {
+        return new Date(unixTimeStamp*1000L);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -46,6 +50,9 @@ public class HomeFragment extends Fragment
             @Override
             public void onClick(View view) {
                 Submission BDSM = new Submission();
+
+                Snackbar mySnackbar = Snackbar.make(view, "Oh Luuuuueeeeeeegiii", 2000);
+                mySnackbar.show();
             }
         });
 
@@ -53,15 +60,12 @@ public class HomeFragment extends Fragment
         fileUploadButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                System.out.println("FUCK ME");
-                String time = "TIME";
-                Date currentTime = Calendar.getInstance().getTime();
-                time = currentTime.toString();
+                Date now = new Date();
+                Long longTime = now.getTime() / 1000;
                 int duration = 2000;
 
 
-
-                Snackbar mySnackbar = Snackbar.make(view, time, duration);
+                Snackbar mySnackbar = Snackbar.make(view, getDataFromUNIX(longTime).toString(), duration);
                 mySnackbar.show();
             }
         });
