@@ -45,6 +45,16 @@ public class HomeFragment extends Fragment
             }
         });
 
+        //Start button that initiates the game.
+        Button fileUpload = root.findViewById(R.id.uploadFileButton);
+        fileUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // upload file
+                System.out.println("FILE");
+            }
+        });
+
 
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(this, new Observer<String>()
