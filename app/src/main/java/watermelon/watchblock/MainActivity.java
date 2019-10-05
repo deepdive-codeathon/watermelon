@@ -1,6 +1,9 @@
 package watermelon.watchblock;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -27,6 +30,17 @@ public class MainActivity extends AppCompatActivity
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        //Smash me Mario button
+        //Start button that initiates the game.
+        Button submitTip = findViewById(R.id.submitTipButton);
+        submitTip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //creates a new class for Mario
+                Submission BDSM = new Submission();
+            }
+        });
     }
 
 }
