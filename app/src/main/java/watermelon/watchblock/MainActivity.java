@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -30,17 +31,6 @@ public class MainActivity extends AppCompatActivity
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
-        //Smash me Mario button
-        //Start button that initiates the game.
-        Button submitTip = findViewById(R.id.submitTipButton);
-        submitTip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //creates a new class for Mario
-                Submission BDSM = new Submission();
-            }
-        });
     }
 
 }
