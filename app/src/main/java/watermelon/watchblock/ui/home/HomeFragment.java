@@ -9,6 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -45,6 +49,22 @@ public class HomeFragment extends Fragment
             }
         });
 
+        Button fileUploadButton = root.findViewById(R.id.fileUploadButton);
+        fileUploadButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                System.out.println("FUCK ME");
+                String time = "TIME";
+                Date currentTime = Calendar.getInstance().getTime();
+                time = currentTime.toString();
+                int duration = 2000;
+
+
+
+                Snackbar mySnackbar = Snackbar.make(view, time, duration);
+                mySnackbar.show();
+            }
+        });
 
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(this, new Observer<String>()
