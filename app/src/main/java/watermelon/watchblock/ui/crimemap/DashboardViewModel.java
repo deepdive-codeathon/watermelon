@@ -1,4 +1,4 @@
-package watermelon.watchblock.ui.dashboard;
+package watermelon.watchblock.ui.crimemap;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
