@@ -166,6 +166,7 @@ public class HomeFragment extends Fragment
             }
         };
 
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         // check if permissions have been granted
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -186,13 +187,12 @@ public class HomeFragment extends Fragment
             }
             else
             {
-                Snackbar.make(getView(), "Unable to retrieve location", Snackbar.LENGTH_LONG)
+                Snackbar.make(getActivity().findViewById(android.R.id.content), "Unable to retrieve location", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         }
 
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
 
 
         //Start button that initiates the game.
@@ -229,12 +229,12 @@ public class HomeFragment extends Fragment
                     boolean success = createAsset(description.getText().toString(),Double.toString(latti),Double.toString(longi),longTime);
                     if (success)
                     {
-                        Snackbar mySnackbar = Snackbar.make(view, "Crime reported.", 2000);
+                        Snackbar mySnackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Crime reported.", 2000);
                         mySnackbar.show();
                     }
                     else
                     {
-                        Snackbar mySnackbar = Snackbar.make(view, "Submission failed, please try again later", 2000);
+                        Snackbar mySnackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Submission failed, please try again later", 2000);
                         mySnackbar.show();
                     }
                 } catch (Exception e)
