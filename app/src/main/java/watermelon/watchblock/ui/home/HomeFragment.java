@@ -118,7 +118,7 @@ public class HomeFragment extends Fragment
 
     private void makeCall(){
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:15055500216"));
+        callIntent.setData(Uri.parse("tel:555555555"));
         startActivity(callIntent);
     }
 
