@@ -1,8 +1,11 @@
 package watermelon.watchblock.ui.crimemap;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
+import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -44,6 +47,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
     String[] lats;
     String[] longs;
     String[] times;
+    SharedPreferences sharedPreferences;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -96,9 +100,25 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
                     System.out.println("Longs: " + longs[i]);
                     System.out.println("Time: " + times[i]);
 
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(lats[i]), Double.parseDouble(longs[i])))
-                            .title(descriptions[i] + " on " + getDataFromUNIX(Long.parseLong(times[i])).toString()));
+                    LatLng currentLocation = new LatLng(35.081298, -106.627641);
+                    double dist = distance(currentLocation.latitude, currentLocation.longitude,
+                            Double.parseDouble(lats[i]), Double.parseDouble(longs[i]));
+
+                    sharedPreferences = getActivity().getSharedPreferences("mainprefs", 0);
+                    int range = Integer.parseInt(sharedPreferences.getString("10", "10"));
+                    int slideTime = Integer.parseInt(sharedPreferences.getString("30", "30"));
+                    System.out.println("Time comparison:");
+                    System.out.println("Current Time: " + System.currentTimeMillis() / 1000L);
+                    System.out.println("Crime Time: " + Long.parseLong(times[i]));
+                    int timeInt = timeInterval(System.currentTimeMillis() / 1000L, Long.parseLong(times[i]));
+                    if(inDistanceRange(dist, range) && inTimeRange(timeInt, slideTime)){
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(lats[i]), Double.parseDouble(longs[i])))
+                                .title(descriptions[i] + " on " + getDataFromUNIX(Long.parseLong(times[i])).toString()));
+                    }
+
+
+
 
                 }
 
@@ -200,7 +220,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
-    private static double distance(double currentLat, double currentLong, double crimeLat, double crimeLong) {
+    private double distance(double currentLat, double currentLong, double crimeLat, double crimeLong) {
         if ((currentLat == crimeLat) && (currentLong == crimeLong)) {
             return 0;
         }
