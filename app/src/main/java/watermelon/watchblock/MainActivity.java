@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,6 +15,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -36,6 +38,9 @@ public class MainActivity extends AppCompatActivity
     public static String uuid;
     public static String coinId;
     public static String myPub;
+    public static String update;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -50,7 +55,7 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        SharedPreferences prefs = MainActivity.this.getSharedPreferences("mainprefs", 0);
+        final SharedPreferences prefs = MainActivity.this.getSharedPreferences("mainprefs", 0);
 
         if (prefs.getBoolean("firstrun", true)) {
             // Do first run stuff here then set 'firstrun' as false
@@ -84,8 +89,127 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true) {
+                    try
+                    {
+                        Thread.sleep(5000);
+                        update();
+                        // update is the raw string
+                        String raw_string[]= update.split("\"time\":");
+                        for(int i = 1; i < raw_string.length; i++)
+                        {
+                            long time = Long.parseLong(raw_string[i].substring(0, 10));
+                            Date now = new Date();
+                            long longTime =  now.getTime() / 1000L;
+
+                            int minInterval = 10;
+                            if (longTime - time <= minInterval)
+                            {
+                                System.out.println(longTime + " " + time);
+                                //parse information\
+                                String crimesUnparsed[] = raw_string[i - 1].split("crimeDescription\":\"");
+                                String eventDetails[] = crimesUnparsed[1].split("\",\"");
+                                for (String s : eventDetails)
+                                {
+                                    System.out.println("help: " + s);
+                                }
+                                String description = eventDetails[0];
+                                double lat = Double.parseDouble(eventDetails[1].replaceAll("[^\\d.]", ""));
+                                double longi = Double.parseDouble(eventDetails[2].replaceAll("[^\\d.]", ""));
+
+                                int radius = prefs.getInt("10", 10);
+                                int timeWindow = prefs.getInt("30", 1);
+                                //submit a notification
+                                Snackbar mySnackbar = Snackbar.make(findViewById(android.R.id.content), description + " at " + lat + "," + longi, 5000);
+                                mySnackbar.show();
+
+
+
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
+    private static double distance(double currentLat, double currentLong, double crimeLat, double crimeLong) {
+        if ((currentLat == crimeLat) && (currentLong == crimeLong)) {
+            return 0;
+        }
+        else {
+            double theta = currentLong - crimeLong;
+            double dist = Math.sin(Math.toRadians(currentLat)) * Math.sin(Math.toRadians(crimeLat)) + Math.cos(Math.toRadians(currentLat)) * Math.cos(Math.toRadians(crimeLat)) * Math.cos(Math.toRadians(theta));
+            dist = Math.acos(dist);
+            dist = Math.toDegrees(dist);
+            dist = dist * 60 * 1.1515;
+            return (dist);
+        }
+    }
+
+    public Date getDataFromUNIX(long unixTimeStamp) {
+        return new Date(unixTimeStamp*1000L);
+    }
+
+    private boolean inDistanceRange(double distance, int range) {
+        return range - distance > 0;
+    }
+
+
+    private int timeInterval(long currentTime, long crimeTime) {
+        long diff = crimeTime - currentTime;
+        Date timeDiff = getDataFromUNIX(diff);
+        int minutes = timeDiff.getMinutes();
+
+        return minutes;
+    }
+
+    private boolean inTimeRange(int timeInterval, int range) {
+        return range - timeInterval > 0;
+    }
+
+    private void update() throws Exception {
+
+        String url = "https://test.devv.io/update";
+        URL obj = new URL(url);
+        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+
+        String urlParameters = "{ \"uuid\": \"" + uuid + "\"}";
+        con.setDoOutput(true);
+
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = urlParameters.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        //System.out.println(con.getResponseCode());
+        //System.out.println(con.getResponseMessage());
+
+        try(BufferedReader br = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+            update = response.toString();
+            //System.out.println("update: " + update);
+        }
+
+    }
 
     private static void disableSSLCertificateChecking() {
         TrustManager[] trustAllCerts = new TrustManager[] {
