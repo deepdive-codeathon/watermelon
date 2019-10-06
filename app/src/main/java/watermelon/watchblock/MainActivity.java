@@ -124,11 +124,9 @@ public class MainActivity extends AppCompatActivity
                                 int radius = prefs.getInt("10", 10);
                                 int timeWindow = prefs.getInt("30", 1);
                                 //submit a notification
+                                System.out.println(distance(35.081, -106.627, lat, longi));
                                 Snackbar mySnackbar = Snackbar.make(findViewById(android.R.id.content), description + " at " + lat + "," + longi, 5000);
                                 mySnackbar.show();
-
-
-
                             }
                         }
                     }

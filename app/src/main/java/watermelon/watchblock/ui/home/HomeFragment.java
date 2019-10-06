@@ -231,6 +231,7 @@ public class HomeFragment extends Fragment
                         mySnackbar.show();
                         WebView webView = new WebView(getActivity().getApplicationContext());
                         webView.getSettings().setJavaScriptEnabled(true);
+                        description.setText("");
                         webView.loadUrl("https://www.cabq.gov/police/file-a-police-report-online");
                         getActivity().setContentView(webView);
                     }
