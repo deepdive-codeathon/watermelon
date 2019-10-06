@@ -37,6 +37,7 @@ import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
@@ -57,6 +58,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 
 import java.util.Locale;
+import java.util.Map;
 
 
 import javax.net.ssl.HttpsURLConnection;
@@ -73,6 +75,8 @@ import watermelon.watchblock.Submission;
 import static watermelon.watchblock.MainActivity.coinId;
 import static watermelon.watchblock.MainActivity.uuid;
 
+
+
 public class HomeFragment extends Fragment
 {
 
@@ -82,6 +86,14 @@ public class HomeFragment extends Fragment
 
 
     TextToSpeech tts;
+
+    public Map JSONtoMap(String json) {
+        Gson gson = new Gson();
+        gson = new Gson();
+        Map map = gson.fromJson(json, Map.class);
+        return map;
+    }
+
 
     private void speak(){
         tts = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
