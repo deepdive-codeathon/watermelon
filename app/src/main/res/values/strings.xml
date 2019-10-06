@@ -11,5 +11,7 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_maps2">Map</string>
+    <string name="time_window">Crime Time Window: </string>
+    <string name="notifications">Notifications</string>
 
 </resources>
