@@ -98,7 +98,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
 
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(Double.parseDouble(lats[i]), Double.parseDouble(longs[i])))
-                            .title(descriptions[i] + " at " + getDataFromUNIX(Long.parseLong(times[i])).toString()));
+                            .title(descriptions[i] + " on " + getDataFromUNIX(Long.parseLong(times[i])).toString()));
 
                 }
 
@@ -199,5 +199,37 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
+    private static double distance(double currentLat, double currentLong, double crimeLat, double crimeLong) {
+        if ((currentLat == crimeLat) && (currentLong == crimeLong)) {
+            return 0;
+        }
+        else {
+            double theta = currentLong - crimeLong;
+            double dist = Math.sin(Math.toRadians(currentLat)) * Math.sin(Math.toRadians(crimeLat)) + Math.cos(Math.toRadians(currentLat)) * Math.cos(Math.toRadians(crimeLat)) * Math.cos(Math.toRadians(theta));
+            dist = Math.acos(dist);
+            dist = Math.toDegrees(dist);
+            dist = dist * 60 * 1.1515;
+            return (dist);
+        }
+    }
+
+    private boolean inDistanceRange(double distance, int range) {
+        return range - distance > 0;
+    }
+
+
+    private int timeInterval(long currentTime, long crimeTime) {
+        long diff = crimeTime - currentTime;
+        Date timeDiff = getDataFromUNIX(diff);
+        int minutes = timeDiff.getMinutes();
+
+        return minutes;
+    }
+
+    private boolean inTimeRange(int timeInterval, int range) {
+        return range - timeInterval > 0;
+    }
+
 
 }

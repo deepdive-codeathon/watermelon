@@ -68,7 +68,6 @@ import androidx.navigation.ui.NavigationUI;
 import watermelon.watchblock.MainActivity;
 
 import watermelon.watchblock.R;
-import watermelon.watchblock.Submission;
 
 import static watermelon.watchblock.MainActivity.coinId;
 import static watermelon.watchblock.MainActivity.uuid;
@@ -144,7 +143,6 @@ public class HomeFragment extends Fragment
             @Override
             public void onLocationChanged(Location location)
             {
-                System.out.println(location.getLongitude());
             }
 
             @Override
@@ -176,7 +174,7 @@ public class HomeFragment extends Fragment
             // request user for location access
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        else
+        else // get phone's location
         {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -195,7 +193,7 @@ public class HomeFragment extends Fragment
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
 
-        //Start button that initiates the game.
+
         Button buttonSolo = root.findViewById(R.id.submitTipButton);
 
 
@@ -212,7 +210,6 @@ public class HomeFragment extends Fragment
         buttonSolo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Submission BDSM = new Submission();
 
 //                speak();
                 //makeCall();
@@ -241,15 +238,8 @@ public class HomeFragment extends Fragment
                 {
                     e.printStackTrace();
                 }
-//                Snackbar mySnackbar = Snackbar.make(view, getDataFromUNIX(longTime).toString(), duration);
-//                Snackbar mySnackbar = Snackbar.make(view, latti + " " + longi, duration);
-//                mySnackbar.show();
-
-
-
             }
         });
-
        return root;
     }
 
