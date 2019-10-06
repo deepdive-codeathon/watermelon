@@ -34,6 +34,9 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
     private DashboardViewModel dashboardViewModel;
     String update;
     private GoogleMap mMap;
+    String time = "12:00";
+    String description = "Execution of Juniper";
+    LatLng location = new LatLng(35.1032075, -106.6011941);
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -65,8 +68,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 1000, null);
 
                 mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(35.1032075, -106.6011941))
-                        .title("Spider Man"));
+                        .position(location)
+                        .title(description + " at " + time));
 
             }
         });
