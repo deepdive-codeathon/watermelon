@@ -3,5 +3,13 @@
     <string name="title_home">Report</string>
     <string name="title_dashboard">Crime Map</string>
     <string name="title_notifications">Settings</string>
+    <string name="crime_map">Crime Radius</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="name_hint">Name</string>
+    <string name="email_hint">Email</string>
+    <string name="phone_hint">Phone</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
     <string name="title_activity_maps2">Map</string>
+
 </resources>
