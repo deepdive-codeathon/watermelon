@@ -55,7 +55,7 @@ public class SettingsFragment extends Fragment
                 crimeRadiusLabel.setText("Crime Radius: " + seekBar.getProgress() + " miles");
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString(CRIME_RADIUS, String.valueOf(seekBar.getProgress()));
-                editor.commit();
+                editor.apply();
             }
 
             @Override
