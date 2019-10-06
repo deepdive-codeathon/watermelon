@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment
     double longi;
     private HomeViewModel homeViewModel;
 
-    // COnverts unix time stamp to a date object
+    // Converts unix time stamp to a date object
     public Date getDataFromUNIX(long unixTimeStamp) {
         return new Date(unixTimeStamp*1000L);
     }
@@ -51,7 +51,6 @@ public class HomeFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
     {
-        System.out.println("1");
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener()
         {
@@ -79,8 +78,6 @@ public class HomeFragment extends Fragment
 
             }
         };
-        System.out.println("2");
-        System.out.println("3");
 
 
         // check if permissions have been granted
@@ -99,7 +96,6 @@ public class HomeFragment extends Fragment
             {
                 latti = location.getLatitude();
                 longi = location.getLongitude();
-                System.out.println("++++++++++++++++++++++++++++ " + latti + " " + longi);
             }
             else
             {
@@ -107,10 +103,6 @@ public class HomeFragment extends Fragment
                         .setAction("Action", null).show();
             }
         }
-
-
-
-        System.out.println("7");
 
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -128,6 +120,7 @@ public class HomeFragment extends Fragment
             }
         });
 
+        // Upload files
         Button fileUploadButton = root.findViewById(R.id.fileUploadButton);
         fileUploadButton.setOnClickListener(new View.OnClickListener(){
             @Override
