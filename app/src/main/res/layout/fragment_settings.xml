@@ -17,6 +17,7 @@
             android:text="@string/time_window"
             android:textSize="18sp"
             android:layout_marginLeft="10dp"
+            android:padding="10dp"
             />
 
 
@@ -26,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:progress="30"
+            android:padding="10dp"
             />
 
         <TextView
@@ -35,6 +37,7 @@
             android:text="@string/crime_map"
             android:textSize="18sp"
             android:layout_marginLeft="10dp"
+            android:padding="10dp"
             />
 
 
@@ -44,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:progress="10"
+            android:padding="10dp"
             />
 
         <TextView
@@ -53,6 +57,7 @@
             android:text="@string/notifications"
             android:textSize="18sp"
             android:layout_marginLeft="10dp"
+            android:padding="10dp"
             />
 
         <Switch
@@ -63,6 +68,7 @@
             app:layout_constraintTop_toBottomOf="@id/notificationsLabel"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginLeft="5dp"
+            android:padding="10dp"
             />
 
 
