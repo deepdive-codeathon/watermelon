@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -37,6 +38,12 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
     String time = "12:00";
     String description = "Execution of Juniper";
     LatLng location = new LatLng(35.1032075, -106.6011941);
+    String[] crimesUnparsed;
+    String[][] crimesParsed;
+    String[] descriptions;
+    String[] lats;
+    String[] longs;
+    String[] times;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -52,6 +59,17 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
+
+                try
+                {
+                    update();
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+                parseUpdate(update);
+
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
                 mMap.clear(); //clear old markers
@@ -71,18 +89,71 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
                         .position(location)
                         .title(description + " at " + time));
 
+                for (int i = 0; i < descriptions.length; i++){
+                    System.out.println("crime: ");
+                    System.out.println("Description: " + descriptions[i]);
+                    System.out.println("Lats: " + lats[i]);
+                    System.out.println("Longs: " + longs[i]);
+                    System.out.println("Time: " + times[i]);
+
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(lats[i]), Double.parseDouble(longs[i])))
+                            .title(descriptions[i] + " at " + getDataFromUNIX(Long.parseLong(times[i])).toString()));
+
+                }
+
             }
         });
 
-        try
-        {
-            update();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+
+
         return root;
     }
+
+    private void parseUpdate(String updateString){
+        System.out.println("updateString: " + updateString);
+        System.out.println("Parsed Information Below: ");
+        crimesUnparsed = updateString.split("crimeDescription\":\"");
+        System.out.println("There are this many crimes: " + crimesUnparsed.length);
+        for (int s = 0; s < crimesUnparsed.length; s++){
+            System.out.println(crimesUnparsed[s]);
+        }
+
+        crimesParsed = new String[crimesUnparsed.length-1][4];
+        descriptions = new String[crimesUnparsed.length-1];
+        lats = new String[crimesUnparsed.length-1];
+        longs = new String[crimesUnparsed.length-1];
+        times = new String[crimesUnparsed.length-1];
+
+        for (int s = 1; s < crimesUnparsed.length; s++){
+            //descriptions[s-1] = crimesUnparsed[s].split("\",\"", 1);
+            crimesParsed[s-1]= crimesUnparsed[s].split("\",\"", 4);
+
+        }
+        for (int i = 0; i < crimesUnparsed.length-1; i++){
+            descriptions[i] = crimesParsed[i][0];
+            lats[i] = crimesParsed[i][1].substring(6);
+            longs[i] = crimesParsed[i][2].substring(7);
+            times[i] = crimesParsed[i][3].substring(6,16);
+        }
+//        for (int i = 0; i < descriptions.length; i++){
+//            System.out.println("crime: ");
+//            System.out.println("Description: " + descriptions[i]);
+//            System.out.println("Lats: " + lats[i]);
+//            System.out.println("Longs: " + longs[i]);
+//            System.out.println("Time: " + times[i]);
+//
+//            mMap.addMarker(new MarkerOptions()
+//                    .position(new LatLng(Double.parseDouble(lats[i]), Double.parseDouble(longs[i])))
+//                    .title(descriptions[i] + " at " + getDataFromUNIX(Long.parseLong(times[i])).toString()));
+//
+//        }
+    }
+
+    public Date getDataFromUNIX(long unixTimeStamp) {
+        return new Date(unixTimeStamp*1000L);
+    }
+
     private void update() throws Exception {
 
         String url = "https://test.devv.io/update";
@@ -113,6 +184,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
             }
             System.out.println(response.toString());
             update = response.toString();
+            System.out.println("update: " + update);
         }
 
     }
