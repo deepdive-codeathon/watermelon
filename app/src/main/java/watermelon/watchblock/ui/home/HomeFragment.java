@@ -291,6 +291,7 @@ public class HomeFragment extends Fragment
 
     private boolean createAsset(String desc, String lat, String lon, long time) throws Exception {
 
+        desc = desc.replace('\n',' ');
         String url = "https://test.devv.io/create-asset";
         URL obj = new URL(url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
