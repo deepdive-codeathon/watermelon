@@ -17,38 +17,42 @@
             android:text="Lat/long"
             android:id="@+id/lat_long"
             android:layout_weight="1"/>
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="5"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter Crime Description:"/>
+                android:text="Enter Crime Description:" />
+
             <EditText
-                android:layout_width="wrap_content"
+                android:id="@+id/crimeDescription"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description"
-                android:id="@+id/crimeDescription"/>
+                android:hint="Description" />
 
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"/>
+            android:layout_weight="7" />
 
         <Button
             android:id="@+id/submitTipButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="Submit" />
 
         <Space
             android:layout_width="match_parent"

@@ -68,7 +68,6 @@ import androidx.navigation.ui.NavigationUI;
 import watermelon.watchblock.MainActivity;
 
 import watermelon.watchblock.R;
-import watermelon.watchblock.Submission;
 
 import static watermelon.watchblock.MainActivity.coinId;
 import static watermelon.watchblock.MainActivity.uuid;
@@ -144,7 +143,6 @@ public class HomeFragment extends Fragment
             @Override
             public void onLocationChanged(Location location)
             {
-                System.out.println(location.getLongitude());
             }
 
             @Override
@@ -175,7 +173,7 @@ public class HomeFragment extends Fragment
             // request user for location access
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        else
+        else // get phone's location
         {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -195,7 +193,7 @@ public class HomeFragment extends Fragment
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        //Start button that initiates the game.
+
         Button buttonSolo = root.findViewById(R.id.submitTipButton);
 
 
@@ -212,7 +210,6 @@ public class HomeFragment extends Fragment
         buttonSolo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Submission BDSM = new Submission();
 
 //                speak();
                 //makeCall();
@@ -229,27 +226,20 @@ public class HomeFragment extends Fragment
                     boolean success = createAsset(description.getText().toString(),Double.toString(latti),Double.toString(longi),longTime);
                     if (success)
                     {
-                        Snackbar mySnackbar = Snackbar.make(view, "Crime reported.", 2000);
+                        Snackbar mySnackbar = Snackbar.make(view, "Crime reported.", duration);
                         mySnackbar.show();
                     }
                     else
                     {
-                        Snackbar mySnackbar = Snackbar.make(view, "Submission failed, please try again later", 2000);
+                        Snackbar mySnackbar = Snackbar.make(view, "Submission failed, please try again later", duration);
                         mySnackbar.show();
                     }
                 } catch (Exception e)
                 {
                     e.printStackTrace();
                 }
-//                Snackbar mySnackbar = Snackbar.make(view, getDataFromUNIX(longTime).toString(), duration);
-//                Snackbar mySnackbar = Snackbar.make(view, latti + " " + longi, duration);
-//                mySnackbar.show();
-
-
-
             }
         });
-
        return root;
     }
 
