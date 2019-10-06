@@ -16,10 +16,12 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.speech.tts.TextToSpeech;
 import android.app.Activity;
@@ -35,6 +37,8 @@ import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -122,6 +126,8 @@ public class HomeFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
     {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener()
         {
@@ -189,28 +195,17 @@ public class HomeFragment extends Fragment
         TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         telephonyManager.listen(phoneListener,PhoneStateListener.LISTEN_CALL_STATE);
 
-
+        final EditText description = root.findViewById(R.id.crimeDescription);
+        TextView latlong = root.findViewById(R.id.lat_long);
+//        latlong.setText(latlong);
+        latlong.setText("Latitude: " + latti + "\nLongitude: " + longi);
         buttonSolo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Submission BDSM = new Submission();
 
-                speak();
+//                speak();
                 //makeCall();
-
-
-
-                Snackbar mySnackbar = Snackbar.make(view, "Oh Luuuuueeeeeeegiii", 2000);
-                mySnackbar.show();
-
-            }
-        });
-
-        // Upload files
-        Button fileUploadButton = root.findViewById(R.id.fileUploadButton);
-        fileUploadButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
                 Date now = new Date();
                 Long longTime = now.getTime() / 1000;
                 int duration = 2000;
@@ -221,28 +216,31 @@ public class HomeFragment extends Fragment
 
                 try
                 {
-                    createAsset(Double.toString(latti),Double.toString(longi),longTime);
+                    boolean success = createAsset(description.getText().toString(),Double.toString(latti),Double.toString(longi),longTime);
+                    if (success)
+                    {
+                        Snackbar mySnackbar = Snackbar.make(view, "Crime reported.", 2000);
+                        mySnackbar.show();
+                    }
+                    else
+                    {
+                        Snackbar mySnackbar = Snackbar.make(view, "Submission failed, please try again later", 2000);
+                        mySnackbar.show();
+                    }
                 } catch (Exception e)
                 {
                     e.printStackTrace();
                 }
-                Snackbar mySnackbar = Snackbar.make(view, getDataFromUNIX(longTime).toString(), duration);
+//                Snackbar mySnackbar = Snackbar.make(view, getDataFromUNIX(longTime).toString(), duration);
 //                Snackbar mySnackbar = Snackbar.make(view, latti + " " + longi, duration);
-                mySnackbar.show();
+//                mySnackbar.show();
+
+
 
             }
         });
 
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>()
-        {
-            @Override
-            public void onChanged(@Nullable String s)
-            {
-                textView.setText(s);
-            }
-        });
-        return root;
+       return root;
     }
 
     //monitor phone call activities
@@ -289,7 +287,9 @@ public class HomeFragment extends Fragment
             }
         }
     }
-    private void createAsset(String lat, String lon, long time) throws Exception {
+
+
+    private boolean createAsset(String desc, String lat, String lon, long time) throws Exception {
 
         String url = "https://test.devv.io/create-asset";
         URL obj = new URL(url);
@@ -300,7 +300,7 @@ public class HomeFragment extends Fragment
         con.setRequestProperty("Accept", "application/json");
 
         String urlParameters = "{ \"uuid\": \"" + uuid + "\", \"coin_id\":" +
-                "\"" + coinId+ "\", \"properties\": {\"crimeDescription\": \"Kelsie stole mario's car\"," +
+                "\"" + coinId+ "\", \"properties\": {\"crimeDescription\": \""+desc+"\"," +
                 "\"lat\": \""+lat+"\",\"long\": \""+lon+"\",\"time\": "+time+"}}";
         con.setDoOutput(true);
 
@@ -321,6 +321,43 @@ public class HomeFragment extends Fragment
             }
             System.out.println(response.toString());
         }
+        return con.getResponseCode() == 200;
 
     }
+
+    private boolean sendTx() throws Exception {
+
+        String url = "https://test.devv.io/create-asset";
+        URL obj = new URL(url);
+        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+
+        String urlParameters = "{ \"uuid\": \"" + uuid + "\", \"coin_id\":" +
+                "\"" + coinId+ "\", \"properties\": {\"crimeDescription\": \""+"\"," + "\"lat\": \""+"\",\"long\": \""+"\",\"time\": "+"}}";
+        con.setDoOutput(true);
+
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = urlParameters.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        System.out.println(con.getResponseCode());
+        System.out.println(con.getResponseMessage());
+
+        try(BufferedReader br = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }
+        return con.getResponseCode() == 200;
+
+    }
+
 }

@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity
     static String title;
     public static String uuid;
     public static String coinId;
+    public static String myPub;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity
 
 
         setContentView(R.layout.activity_main);
-        System.out.println("asdfasdf");
 
         SharedPreferences prefs = MainActivity.this.getSharedPreferences("mainprefs", 0);
 
@@ -112,7 +112,10 @@ public class MainActivity extends AppCompatActivity
             System.out.println(response.toString());
             String strResp = response.toString();
             uuid = strResp.substring(strResp.indexOf("uuid") + 7, strResp.length()-2);
+            myPub = strResp.substring(strResp.indexOf("pub") + 6, strResp.indexOf("testnet")-2);
             System.out.println(uuid);
+            System.out.println(myPub);
+
         }
 
     }
