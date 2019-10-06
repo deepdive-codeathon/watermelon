@@ -10,4 +10,6 @@
     <string name="phone_hint">Phone</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="title_activity_maps2">Map</string>
+
 </resources>
