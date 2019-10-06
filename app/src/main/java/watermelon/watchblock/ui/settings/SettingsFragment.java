@@ -126,15 +126,15 @@ public class SettingsFragment extends Fragment
             }
         });
 
-//        final Button editProfile = root.findViewById(R.id.editProfile);
-//
-//        editProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), ProfileActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        final Button editProfile = root.findViewById(R.id.editProfile);
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         return root;
