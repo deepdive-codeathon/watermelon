@@ -37,8 +37,6 @@ import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
@@ -87,12 +85,12 @@ public class HomeFragment extends Fragment
 
     TextToSpeech tts;
 
-    public Map JSONtoMap(String json) {
-        Gson gson = new Gson();
-        gson = new Gson();
-        Map map = gson.fromJson(json, Map.class);
-        return map;
-    }
+//    public Map JSONtoMap(String json) {
+//        Gson gson = new Gson();
+//        gson = new Gson();
+//        Map map = gson.fromJson(json, Map.class);
+//        return map;
+//    }
 
 
     private void speak(){
