@@ -5,6 +5,35 @@
     android:layout_height="match_parent">
 
 
+
+    <TextView
+        android:id="@+id/timeWindow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/time_window"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintBottom_toTopOf="@id/timeSeekBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
+    <SeekBar
+        android:id="@+id/timeSeekBar"
+        android:max="60"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="30"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@id/crimeRadiusLabel"
+        app:layout_constraintTop_toBottomOf="@id/timeWindow"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
     <TextView
         android:id="@+id/crimeRadiusLabel"
         android:layout_width="match_parent"
@@ -12,8 +41,8 @@
         android:text="@string/crime_map"
         android:textSize="18sp"
         android:layout_marginLeft="10dp"
-        app:layout_constraintBottom_toTopOf="@id/distanceSeekBar"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/distanceSeekBar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />
@@ -24,24 +53,50 @@
         android:max="25"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:progress="10"
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@id/editProfile"
+        app:layout_constraintBottom_toTopOf="@id/notificationsLabel"
         app:layout_constraintTop_toBottomOf="@id/crimeRadiusLabel"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />
 
-    <Button
-        android:id="@+id/editProfile"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/notificationsLabel"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/edit_profile"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:text="@string/notifications"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
         app:layout_constraintTop_toBottomOf="@id/distanceSeekBar"
+        app:layout_constraintBottom_toTopOf="@id/allowNotifications"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         />
+
+    <Switch
+        android:id="@+id/allowNotifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notificationsLabel"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="5dp"
+        />
+
+
+
+<!--    <Button-->
+<!--        android:id="@+id/editProfile"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/edit_profile"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/distanceSeekBar"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
