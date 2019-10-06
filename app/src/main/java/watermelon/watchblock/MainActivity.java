@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
                                 int radius = prefs.getInt("10", 10);
                                 int timeWindow = prefs.getInt("30", 1);
                                 //submit a notification
-                                System.out.println(distance(35.081, -106.627, lat, longi));
+                                //System.out.println(distance(35.081, -106.627, lat, longi));
                                 Snackbar mySnackbar = Snackbar.make(findViewById(android.R.id.content), description + " at " + lat + "," + longi, 5000);
                                 mySnackbar.show();
                             }
@@ -192,8 +192,8 @@ public class MainActivity extends AppCompatActivity
             os.write(input, 0, input.length);
         }
 
-        //System.out.println(con.getResponseCode());
-        //System.out.println(con.getResponseMessage());
+        System.out.println(con.getResponseCode());
+        System.out.println(con.getResponseMessage());
 
         try(BufferedReader br = new BufferedReader(
                 new InputStreamReader(con.getInputStream(), "utf-8"))) {
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity
             }
             System.out.println(response.toString());
             update = response.toString();
-            //System.out.println("update: " + update);
+            System.out.println("update: " + update);
         }
 
     }
