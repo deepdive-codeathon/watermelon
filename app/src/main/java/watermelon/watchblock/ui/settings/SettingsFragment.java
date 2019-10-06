@@ -29,7 +29,7 @@ public class SettingsFragment extends Fragment
     int progressBar = 10;
     public static final String CRIME_RADIUS = "10";
     public static final String TIME_WINDOW = "30";
-    public static final String IS_CHECKED = "";
+    public static final String IS_CHECKED = "notifications";
 
     private SettingsViewModel settingsViewModel;
 
@@ -126,15 +126,15 @@ public class SettingsFragment extends Fragment
             }
         });
 
-//        final Button editProfile = root.findViewById(R.id.editProfile);
-//
-//        editProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), ProfileActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        final Button editProfile = root.findViewById(R.id.editProfile);
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         return root;

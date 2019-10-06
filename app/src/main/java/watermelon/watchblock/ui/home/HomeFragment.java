@@ -20,6 +20,7 @@ import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -228,6 +229,11 @@ public class HomeFragment extends Fragment
                     {
                         Snackbar mySnackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Crime reported.", 2000);
                         mySnackbar.show();
+                        WebView webView = new WebView(getActivity().getApplicationContext());
+                        webView.getSettings().setJavaScriptEnabled(true);
+                        description.setText("");
+                        webView.loadUrl("https://www.cabq.gov/police/file-a-police-report-online");
+                        getActivity().setContentView(webView);
                     }
                     else
                     {
