@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity
 
     static String title;
     public static String uuid;
-    static String coinId;
+    public static String coinId;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity
             this.getSupportActionBar().hide();
         }
         catch (NullPointerException e){}
-
-
 
 
         setContentView(R.layout.activity_main);
@@ -72,7 +70,6 @@ public class MainActivity extends AppCompatActivity
                 {
                     sendPost();
                     defineTemplate();
-                    createAsset();
                 } catch (Exception e)
                 {
                     e.printStackTrace();
@@ -92,8 +89,8 @@ public class MainActivity extends AppCompatActivity
         con.setRequestProperty("Content-Type", "application/json; utf-8");
         con.setRequestProperty("Accept", "application/json");
 
-        String urlParameters = "{\"user\":\"wb_admin\"," +
-                "\"pass\":\"00f32c3d7a080069012a2a1fff5f385b0d511b7f619d4369c2a3da104848471d" +
+        String urlParameters = "{\"user\":\"kelsiesucks\"," +
+                "\"pass\":\"d58e461ccafdd86d88ee49607aefc4882850eabf9e59f56d9d9c5c1c2f3d6abe" +
                 "\"}";
         con.setDoOutput(true);
 
@@ -131,8 +128,12 @@ public class MainActivity extends AppCompatActivity
         con.setRequestProperty("Accept", "application/json");
 
         String urlParameters = "{ \"uuid\": \"" + uuid +"\", \"name\": \"Crime\"," +
-                "\"fungible\": false, \"properties\": {\"crimeDescription\": {\"type\": \"string\"," +
-                "\"default\": \"\"}}, \"required\": [\"crimeDescription\"]}";
+                "\"fungible\": false, \"properties\": " +
+                "{\"crimeDescription\": {\"type\": \"string\"," + "\"default\": \"\"}," +
+                "\"lat\": {\"type\": \"string\"," + "\"default\": \"\"}," +
+                "\"long\": {\"type\": \"string\"," + "\"default\": \"\"}," +
+                "\"time\": {\"type\": \"int\"," + "\"default\": 1}" +
+                "}, \"required\": [\"crimeDescription\", \"lat\",\"long\", \"time\"]}";
         con.setDoOutput(true);
 
         try(OutputStream os = con.getOutputStream()) {
@@ -157,37 +158,5 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-    private void createAsset() throws Exception {
 
-        String url = "https://test.devv.io/create-asset";
-        URL obj = new URL(url);
-        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
-        con.setRequestProperty("Accept", "application/json");
-
-        String urlParameters = "{ \"uuid\": \"" + uuid + "\", \"coin_id\":" +
-                "\"" + coinId+ "\", \"properties\": {\"crimeDescription\": \"Kelsie shot Juniper and Alan\"}}";
-        con.setDoOutput(true);
-
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = urlParameters.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        }
-
-        System.out.println(con.getResponseCode());
-        System.out.println(con.getResponseMessage());
-
-        try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response.toString());
-        }
-
-    }
 }

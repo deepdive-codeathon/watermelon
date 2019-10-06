@@ -36,6 +36,10 @@ import android.util.Log;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -51,6 +55,8 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.Locale;
 
 
+import javax.net.ssl.HttpsURLConnection;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -59,6 +65,9 @@ import watermelon.watchblock.MainActivity;
 
 import watermelon.watchblock.R;
 import watermelon.watchblock.Submission;
+
+import static watermelon.watchblock.MainActivity.coinId;
+import static watermelon.watchblock.MainActivity.uuid;
 
 public class HomeFragment extends Fragment
 {
@@ -210,7 +219,13 @@ public class HomeFragment extends Fragment
                 System.out.println(longi);
 
 
-
+                try
+                {
+                    createAsset(Double.toString(latti),Double.toString(longi),longTime);
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
                 Snackbar mySnackbar = Snackbar.make(view, getDataFromUNIX(longTime).toString(), duration);
 //                Snackbar mySnackbar = Snackbar.make(view, latti + " " + longi, duration);
                 mySnackbar.show();
@@ -273,5 +288,39 @@ public class HomeFragment extends Fragment
 
             }
         }
+    }
+    private void createAsset(String lat, String lon, long time) throws Exception {
+
+        String url = "https://test.devv.io/create-asset";
+        URL obj = new URL(url);
+        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+
+        String urlParameters = "{ \"uuid\": \"" + uuid + "\", \"coin_id\":" +
+                "\"" + coinId+ "\", \"properties\": {\"crimeDescription\": \"Kelsie stole mario's car\"," +
+                "\"lat\": \""+lat+"\",\"long\": \""+lon+"\",\"time\": "+time+"}}";
+        con.setDoOutput(true);
+
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = urlParameters.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        System.out.println(con.getResponseCode());
+        System.out.println(con.getResponseMessage());
+
+        try(BufferedReader br = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }
+
     }
 }
