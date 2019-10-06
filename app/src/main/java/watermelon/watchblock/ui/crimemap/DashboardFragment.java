@@ -1,5 +1,7 @@
 package watermelon.watchblock.ui.crimemap;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -10,7 +12,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -32,6 +39,8 @@ import static watermelon.watchblock.MainActivity.uuid;
 public class DashboardFragment extends Fragment implements OnMapReadyCallback
 {
 
+    public static final String CRIME_TIME = "crimeTimeKey";
+
     private DashboardViewModel dashboardViewModel;
     String update;
     private GoogleMap mMap;
@@ -44,6 +53,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
     String[] lats;
     String[] longs;
     String[] times;
+    SharedPreferences sharedpreferences;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -59,7 +70,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
-
+                System.out.println("ON MAP READY");
                 try
                 {
                     update();
@@ -130,12 +141,45 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback
             crimesParsed[s-1]= crimesUnparsed[s].split("\",\"", 4);
 
         }
+
+
+        sharedpreferences = this.getActivity().getSharedPreferences("mainprefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        System.out.println("\n\nBEFORE CRIMES UNPARSED\n\n");
         for (int i = 0; i < crimesUnparsed.length-1; i++){
             descriptions[i] = crimesParsed[i][0];
             lats[i] = crimesParsed[i][1].substring(6);
             longs[i] = crimesParsed[i][2].substring(7);
             times[i] = crimesParsed[i][3].substring(6,16);
+//            editor.putString(CRIME_TIME, times[i]);
+//            editor.apply();
+//            System.out.println("\n\nRIGHT BEFORE PREFERENCES STUFF\n\n");
+//            System.out.println("SIZE SHARED PREF SET" + sharedpreferences.getStringSet(CRIME_TIME, null).size());
+            Set<String> defVals = new HashSet<>();
+            System.out.println("JOHNS PLAYLIST");
+            Set<String> fetch = sharedpreferences.getStringSet(CRIME_TIME, defVals);
+            if(fetch != null) {
+                if(!(fetch.contains(times[i]))) {
+                    System.out.println("\n\nTHE STRING IS NEW\n\n");
+                }
+            }
+
+//            if (fetch.contains((String) times[i])) {
+//                System.out.println("\n\n\n YA NEED TO GET IT TOGETHER\n\n\n");
+//            }
+//            if(!(sharedpreferences.getStringSet(CRIME_TIME, new HashSet<String>()).contains(times[i]))) {
+//                System.out.println("\n\n\n\nSEND NOTIFICATION\n\n\n\n");
+//                //SEND NOTIFICATION
+//            }
         }
+
+        Set<String> timesSet = new HashSet<>(Arrays.asList(times));
+        editor.putStringSet(CRIME_TIME, timesSet);
+        editor.apply();
+
+
+
+
 //        for (int i = 0; i < descriptions.length; i++){
 //            System.out.println("crime: ");
 //            System.out.println("Description: " + descriptions[i]);
